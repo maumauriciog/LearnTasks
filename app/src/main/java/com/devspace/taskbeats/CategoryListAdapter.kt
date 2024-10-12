@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 class CategoryListAdapter :
     ListAdapter<CategoryUiData, CategoryListAdapter.CategoryViewHolder>(CategoryListAdapter) {
-
     private lateinit var onClick: (CategoryUiData) -> Unit
 
     fun setOnClickListener(onClick: (CategoryUiData) -> Unit) {
@@ -29,11 +28,11 @@ class CategoryListAdapter :
     }
 
     class CategoryViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        private val tvCategory = view.findViewById<TextView>(R.id.tv_category)
+        private val tvItemCategory = view.findViewById<TextView>(R.id.tv_itemCategory)
 
         fun bind(category: CategoryUiData, onClick: (CategoryUiData) -> Unit) {
-            tvCategory.text = category.name
-            tvCategory.isSelected = category.isSelected
+            tvItemCategory.text = category.name
+            tvItemCategory.isSelected = category.isSelected
 
             view.setOnClickListener {
                 onClick.invoke(category)
@@ -49,8 +48,5 @@ class CategoryListAdapter :
         override fun areContentsTheSame(oldItem: CategoryUiData, newItem: CategoryUiData): Boolean {
             return oldItem.name == newItem.name
         }
-
     }
-
-
 }
