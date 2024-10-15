@@ -55,14 +55,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         rvCategory.adapter = categoryAdapter
-        categoryAdapter.submitList(categories)
+        getCategory(categoryAdapter)
 
         rvTask.adapter = taskAdapter
         taskAdapter.submitList(tasks)
     }
 
     private fun insertCategory() {
-        //convertendo / passando os dados de data class (categories) em entity (CategoryEntity)
+        //convertendo / passando os dados de data class (categories) para o entity (CategoryEntity)
         GlobalScope.launch(Dispatchers.IO) {
             val istCategory = categories.map {
                 CategoryEntity(
@@ -74,6 +74,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getCategory(adapter: CategoryListAdapter) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val categoriesFromDB: List<CategoryEntity> = categoryDao.getAll()
+            val categoryUI = categoriesFromDB.map {
+                CategoryUiData(
+                    name = it.name,
+                    isSelected = it.isSelected
+                )
+            }
+            GlobalScope.launch(Dispatchers.Main) {
+                adapter.submitList(categoryUI)
+            }
+        }
+    }
 }
 
 val categories = listOf(
