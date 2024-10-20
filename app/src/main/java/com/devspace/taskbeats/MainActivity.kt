@@ -1,3 +1,5 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package com.devspace.taskbeats
 
 import androidx.appcompat.app.AppCompatActivity
@@ -9,13 +11,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@OptIn(DelicateCoroutinesApi::class)
 class MainActivity : AppCompatActivity() {
-
     private val database by lazy {
         Room.databaseBuilder(
             applicationContext,
-            TaskBeatsDataBase::class.java, "data-base-task"
+            TaskBeatsDataBase::class.java, "data-base-tasks"
         ).build()
     }
     private val categoryDao: CategoryDAO by lazy {
@@ -50,42 +50,26 @@ class MainActivity : AppCompatActivity() {
                     tasks
                 }
             taskAdapter.submitList(taskTemp)
-
             categoryAdapter.submitList(categoryTemp)
         }
 
         rvCategory.adapter = categoryAdapter
-        getCategory(categoryAdapter)
+        categoryAdapter.submitList(categories)
 
         rvTask.adapter = taskAdapter
         taskAdapter.submitList(tasks)
     }
 
-    private fun insertCategory() {
-        //convertendo / passando os dados de data class (categories) para o entity (CategoryEntity)
-        GlobalScope.launch(Dispatchers.IO) {
-            val istCategory = categories.map {
+    //function insert categories in to database
+    private fun insertCategory(){
+        GlobalScope.launch(Dispatchers.IO){
+            var insCategory = categories.map {
                 CategoryEntity(
                     name = it.name,
-                    isSelected = it.isSelected
+                    isSelected = false
                 )
             }
-            categoryDao.insertAll(istCategory)
-        }
-    }
-
-    private fun getCategory(adapter: CategoryListAdapter) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val categoriesFromDB: List<CategoryEntity> = categoryDao.getAll()
-            val categoryUI = categoriesFromDB.map {
-                CategoryUiData(
-                    name = it.name,
-                    isSelected = it.isSelected
-                )
-            }
-            GlobalScope.launch(Dispatchers.Main) {
-                adapter.submitList(categoryUI)
-            }
+            categoryDao.insert(insCategory)
         }
     }
 }

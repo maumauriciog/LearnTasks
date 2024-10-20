@@ -15,17 +15,17 @@ class TaskListAdapter : ListAdapter<TaskUiData, TaskListAdapter.TaskViewHolder>(
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val tasks = getItem(position)
-        holder.bind(tasks)
+        val task = getItem(position)
+        holder.bind(task)
     }
 
     class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val tvCategoryNameNoTask = view.findViewById<TextView>(R.id.tv_category_name_noTask)
-        private val tvTaskName = view.findViewById<TextView>(R.id.tv_task_name)
+        private val rvTasks = view.findViewById<TextView>(R.id.tv_task_name)
+        private val rvTskCategory = view.findViewById<TextView>(R.id.tv_category_name_noTask)
 
         fun bind(task: TaskUiData) {
-            tvCategoryNameNoTask.text = task.category
-            tvTaskName.text = task.name
+            rvTasks.text = task.name
+            rvTskCategory.text = task.category
         }
     }
 
