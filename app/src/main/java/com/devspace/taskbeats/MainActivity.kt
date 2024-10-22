@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     private val database by lazy {
         Room.databaseBuilder(
             applicationContext,
-            TaskBeatsDataBase::class.java, "data-base-tasks"
+            TaskBeatsDataBase::class.java, "data-base-task"
         ).build()
     }
     private val categoryDao: CategoryDAO by lazy {
@@ -25,9 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        insertCategory()
-
+        insertCategories()
         val rvCategory = findViewById<RecyclerView>(R.id.rv_categories)
         val rvTask = findViewById<RecyclerView>(R.id.rv_tasks)
 
@@ -60,13 +58,13 @@ class MainActivity : AppCompatActivity() {
         taskAdapter.submitList(tasks)
     }
 
-    //function insert categories in to database
-    private fun insertCategory(){
-        GlobalScope.launch(Dispatchers.IO){
-            var insCategory = categories.map {
+    //insert categories in to database
+    fun insertCategories() {
+        GlobalScope.launch(Dispatchers.IO) {
+            val insCategory = categories.map {
                 CategoryEntity(
                     name = it.name,
-                    isSelected = false
+                    isSelected = it.isSelected
                 )
             }
             categoryDao.insert(insCategory)
