@@ -51,8 +51,9 @@ class MainActivity : AppCompatActivity() {
             categoryAdapter.submitList(categoryTemp)
         }
 
+        //list all categories from dabase
         rvCategory.adapter = categoryAdapter
-        categoryAdapter.submitList(categories)
+        getCategories(categoryAdapter)
 
         rvTask.adapter = taskAdapter
         taskAdapter.submitList(tasks)
@@ -68,6 +69,22 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             categoryDao.insert(insCategory)
+        }
+    }
+
+    //get categories
+    private fun getCategories(adapter: CategoryListAdapter){
+        GlobalScope.launch(Dispatchers.IO){
+            val getCategories: List<CategoryEntity> = categoryDao.getAll()
+            val UICategories = getCategories.map {
+                CategoryUiData(
+                    name = it.name,
+                    isSelected = it.isSelected
+                )
+            }
+            GlobalScope.launch(Dispatchers.Main) {
+                adapter.submitList(UICategories)
+            }
         }
     }
 }
