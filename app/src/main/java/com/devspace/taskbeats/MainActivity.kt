@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //insert categories in to database
-    fun insertCategories() {
+    private fun insertCategories() {
         GlobalScope.launch(Dispatchers.IO) {
             val insCategory = categories.map {
                 CategoryEntity(
