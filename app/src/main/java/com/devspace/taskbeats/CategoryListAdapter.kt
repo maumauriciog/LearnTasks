@@ -8,12 +8,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class CategoryListAdapter :
-    ListAdapter<CategoryUiData, CategoryListAdapter.CategoryViewHolder>(CategoryListAdapter) {
-    private lateinit var onClick: (CategoryUiData) -> Unit
+class CategoryListAdapter : ListAdapter<CategoryUiData, CategoryListAdapter.CategoryViewHolder>(CategoryListAdapter) {
+    private lateinit var onClicked: (CategoryUiData) -> Unit
 
     fun setOnClickListener(onClick: (CategoryUiData) -> Unit) {
-        this.onClick = onClick
+        this.onClicked = onClick
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -23,19 +22,19 @@ class CategoryListAdapter :
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val category = getItem(position)
-        holder.bind(category, onClick)
+        val categories = getItem(position)
+        holder.bind(categories, onClicked)
     }
 
     class CategoryViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        private val tvItemCategory = view.findViewById<TextView>(R.id.tv_itemCategory)
+        private var rvCategory = view.findViewById<TextView>(R.id.tv_itemCategory)
 
-        fun bind(category: CategoryUiData, onClick: (CategoryUiData) -> Unit) {
-            tvItemCategory.text = category.name
-            tvItemCategory.isSelected = category.isSelected
+        fun bind(categories: CategoryUiData, onClick: (CategoryUiData) -> Unit) {
+            rvCategory.text = categories.name
+            rvCategory.isSelected = categories.isSelected
 
             view.setOnClickListener {
-                onClick.invoke(category)
+                onClick.invoke(categories)
             }
         }
     }
@@ -49,4 +48,5 @@ class CategoryListAdapter :
             return oldItem.name == newItem.name
         }
     }
+
 }

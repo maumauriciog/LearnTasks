@@ -1,14 +1,32 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package com.devspace.taskbeats
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+    private val database by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            TaskBeatsDataBase::class.java, "data-base-tasks"
+        ).build()
+    }
+    private val categoryDao: CategoryDAO by lazy {
+        database.getCategoryDao()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        insertCategory()
 
         val rvCategory = findViewById<RecyclerView>(R.id.rv_categories)
         val rvTask = findViewById<RecyclerView>(R.id.rv_tasks)
@@ -32,7 +50,6 @@ class MainActivity : AppCompatActivity() {
                     tasks
                 }
             taskAdapter.submitList(taskTemp)
-
             categoryAdapter.submitList(categoryTemp)
         }
 
@@ -41,6 +58,19 @@ class MainActivity : AppCompatActivity() {
 
         rvTask.adapter = taskAdapter
         taskAdapter.submitList(tasks)
+    }
+
+    //function insert categories in to database
+    private fun insertCategory(){
+        GlobalScope.launch(Dispatchers.IO){
+            var insCategory = categories.map {
+                CategoryEntity(
+                    name = it.name,
+                    isSelected = false
+                )
+            }
+            categoryDao.insert(insCategory)
+        }
     }
 }
 
