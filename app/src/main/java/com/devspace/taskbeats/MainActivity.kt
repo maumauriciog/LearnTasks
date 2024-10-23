@@ -41,9 +41,9 @@ class MainActivity : AppCompatActivity() {
         val categoryAdapter = CategoryListAdapter()
 
         categoryAdapter.setOnClickListener { selected ->
-            if (selected.name == "Add Category...") {
-                Snackbar.make(rvCategory, "você click em add", Snackbar.LENGTH_LONG).show()
-            } else {
+            if (selected.name != "Add Category..."){
+                Snackbar.make(rvCategory, "Click em add category", Snackbar.LENGTH_LONG).show()
+            } else{
                 val categoryTemp = categories.map { item ->
                     when {
                         item.name == selected.name && !item.isSelected -> item.copy(isSelected = true)
@@ -51,14 +51,8 @@ class MainActivity : AppCompatActivity() {
                         else -> item
                     }
                 }
-                val taskTemp = if (selected.name != "All") {
-                    tasks.filter { it.category == selected.name }
-                } else {
-                    tasks
-                }
-                taskAdapter.submitList(taskTemp)
-                categoryAdapter.submitList(categoryTemp)
             }
+
         }
 
         rvCategory.adapter = categoryAdapter
