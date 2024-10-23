@@ -51,7 +51,16 @@ class MainActivity : AppCompatActivity() {
                         else -> item
                     }
                 }
+                val taskTemp = if (selected.name != "All"){
+                    tasks.filter { it.category == selected.name }
+                }else {
+                    tasks
+                }
+                categoryAdapter.submitList(categoryTemp)
+                taskAdapter.submitList(taskTemp)
             }
+
+
 
         }
 
