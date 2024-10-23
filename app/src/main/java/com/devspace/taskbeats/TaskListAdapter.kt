@@ -15,17 +15,17 @@ class TaskListAdapter : ListAdapter<TaskUiData, TaskListAdapter.TaskViewHolder>(
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val tasks = getItem(position)
-        holder.bind(tasks)
+        val task = getItem(position)
+        holder.bind(task)
     }
 
     class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val tvTask = view.findViewById<TextView>(R.id.tv_task_name)
-        private val tvCategoryNameNoTask = view.findViewById<TextView>(R.id.tv_task_name)
+        private val tvCategoryTask = view.findViewById<TextView>(R.id.tv_category_name_noTask)
 
-        fun bind(uitask: TaskUiData) {
-            tvTask.text = uitask.name
-            tvCategoryNameNoTask.text = uitask.category
+        fun bind(uiTask: TaskUiData) {
+            tvTask.text = uiTask.name
+            tvCategoryTask.text = uiTask.category
         }
     }
 
@@ -33,7 +33,6 @@ class TaskListAdapter : ListAdapter<TaskUiData, TaskListAdapter.TaskViewHolder>(
         override fun areItemsTheSame(oldItem: TaskUiData, newItem: TaskUiData): Boolean {
             return oldItem == newItem
         }
-
         override fun areContentsTheSame(oldItem: TaskUiData, newItem: TaskUiData): Boolean {
          return oldItem.name == newItem.name
         }

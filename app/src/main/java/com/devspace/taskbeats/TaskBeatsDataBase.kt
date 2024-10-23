@@ -7,4 +7,5 @@ import androidx.room.RoomDatabase
 abstract class TaskBeatsDataBase: RoomDatabase() {
 
     abstract fun getCategoryDao(): CategoryDAO
+    abstract fun getTaskDao(): TaskDAO
 }
