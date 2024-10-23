@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -13,8 +14,8 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private val categories: List<CategoryUiData> = listOf()
-    private val tasks: List<TaskUiData> = listOf()
+    private var categories = listOf<CategoryUiData>()
+    private var tasks = listOf<TaskUiData>()
 
     private val database by lazy {
         Room.databaseBuilder(
@@ -40,20 +41,24 @@ class MainActivity : AppCompatActivity() {
         val categoryAdapter = CategoryListAdapter()
 
         categoryAdapter.setOnClickListener { selected ->
-            val categoryTemp = categories.map { item ->
-                when {
-                    item.name == selected.name && !item.isSelected -> item.copy(isSelected = true)
-                    item.name == selected.name && item.isSelected -> item.copy(isSelected = false)
-                    else -> item
-                }
-            }
-            val taskTemp = if (selected.name != "All") {
-                tasks.filter { it.category == selected.name }
+            if (selected.name == "Add Category...") {
+                Snackbar.make(rvCategory, "você click em add", Snackbar.LENGTH_LONG).show()
             } else {
-                tasks
+                val categoryTemp = categories.map { item ->
+                    when {
+                        item.name == selected.name && !item.isSelected -> item.copy(isSelected = true)
+                        item.name == selected.name && item.isSelected -> item.copy(isSelected = false)
+                        else -> item
+                    }
+                }
+                val taskTemp = if (selected.name != "All") {
+                    tasks.filter { it.category == selected.name }
+                } else {
+                    tasks
+                }
+                taskAdapter.submitList(taskTemp)
+                categoryAdapter.submitList(categoryTemp)
             }
-            taskAdapter.submitList(taskTemp)
-            categoryAdapter.submitList(categoryTemp)
         }
 
         rvCategory.adapter = categoryAdapter
@@ -71,7 +76,15 @@ class MainActivity : AppCompatActivity() {
                     name = it.name, isSelected = it.isSelected
                 )
             }
+                .toMutableList()
+            uICategories.add(
+                CategoryUiData(
+                    name = "Add Category...",
+                    isSelected = false
+                )
+            )
             GlobalScope.launch(Dispatchers.Main) {
+                categories = uICategories
                 adapter.submitList(uICategories)
             }
         }
@@ -88,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             GlobalScope.launch(Dispatchers.Main) {
+                tasks = insAdpTasks
                 adapter.submitList(insAdpTasks)
             }
         }
