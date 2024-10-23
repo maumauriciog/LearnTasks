@@ -3,6 +3,7 @@ package com.devspace.taskbeats
 import androidx.room.Database
 import androidx.room.RoomDatabase
 
+//create the tables on the database
 @Database([CategoryEntity::class, TaskEntity::class], version = 1)
 abstract class TaskBeatsDataBase: RoomDatabase() {
 

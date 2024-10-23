@@ -12,6 +12,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+
+    private val categories: List<CategoryUiData> = listOf()
+    private val tasks: List<TaskUiData> = listOf()
+
     private val database by lazy {
         Room.databaseBuilder(
             applicationContext,
@@ -28,9 +32,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        insertCategories()
-        insertTask()
 
         val rvCategory = findViewById<RecyclerView>(R.id.rv_categories)
         val rvTask = findViewById<RecyclerView>(R.id.rv_tasks)
@@ -61,18 +62,6 @@ class MainActivity : AppCompatActivity() {
         getTasks(taskAdapter)
     }
 
-    //insert categories in to database
-    private fun insertCategories() {
-        GlobalScope.launch(Dispatchers.IO) {
-            val insCategory = categories.map {
-                CategoryEntity(
-                    name = it.name, isSelected = it.isSelected
-                )
-            }
-            categoryDao.insert(insCategory)
-        }
-    }
-
     //get categories
     private fun getCategories(adapter: CategoryListAdapter) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -85,18 +74,6 @@ class MainActivity : AppCompatActivity() {
             GlobalScope.launch(Dispatchers.Main) {
                 adapter.submitList(uICategories)
             }
-        }
-    }
-
-    //insert tasks in to database
-    private fun insertTask() {
-        GlobalScope.launch(Dispatchers.IO) {
-            val insTasks = tasks.map {
-                TaskEntity(
-                    nameCategory = it.category, nameTask = it.name
-                )
-            }
-            taskDao.insert(insTasks)
         }
     }
 
@@ -116,64 +93,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-val categories = listOf(
-    CategoryUiData(
-        name = "All", isSelected = false
-    ),
-    CategoryUiData(
-        name = "STUDY", isSelected = false
-    ),
-    CategoryUiData(
-        name = "WORK",
-        isSelected = false
-    ),
-    CategoryUiData(
-        name = "WELLNESS",
-        isSelected = false
-    ),
-    CategoryUiData(
-        name = "HOME",
-        isSelected = false
-    ),
-    CategoryUiData(
-        name = "HEALTH",
-        isSelected = false
-    )
-)
-
-val tasks = listOf(
-    TaskUiData(
-        "Ler 10 páginas do livro atual", "STUDY"
-    ),
-    TaskUiData(
-        "45 min de treino na academia", "HEALTH"
-    ),
-    TaskUiData(
-        "Correr 5km", "HEALTH"
-    ),
-    TaskUiData(
-        "Meditar por 10 min", "WELLNESS"
-    ),
-    TaskUiData(
-        "Silêncio total por 5 min", "WELLNESS"
-    ),
-    TaskUiData(
-        "Descer o livo", "HOME"
-    ),
-    TaskUiData(
-        "Tirar caixas da garagem", "HOME"
-    ),
-    TaskUiData(
-        "Lavar o carro", "HOME"
-    ),
-    TaskUiData(
-        "Gravar aulas DevSpace", "WORK"
-    ),
-    TaskUiData(
-        "Criar planejamento de vídeos da semana", "WORK"
-    ),
-    TaskUiData(
-        "Soltar reels da semana", "WORK"
-    ),
-)
