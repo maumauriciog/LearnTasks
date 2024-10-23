@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        insertCategories()
+        insertTask()
+
         val rvCategory = findViewById<RecyclerView>(R.id.rv_categories)
         val rvTask = findViewById<RecyclerView>(R.id.rv_tasks)
 
@@ -53,10 +56,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         rvCategory.adapter = categoryAdapter
-        categoryAdapter.submitList(categories)
-
+        getCategories(categoryAdapter)
         rvTask.adapter = taskAdapter
-        taskAdapter.submitList(tasks)
+        getTasks(taskAdapter)
     }
 
     //insert categories in to database
@@ -70,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             categoryDao.insert(insCategory)
         }
     }
+
     //get categories
     private fun getCategories(adapter: CategoryListAdapter) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -94,6 +97,22 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             taskDao.insert(insTasks)
+        }
+    }
+
+    //get all tasks from database
+    private fun getTasks(adapter: TaskListAdapter) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val getFromDbTasks: List<TaskEntity> = taskDao.getAll()
+            val insAdpTasks = getFromDbTasks.map {
+                TaskUiData(
+                    name = it.nameTask,
+                    category = it.nameCategory
+                )
+            }
+            GlobalScope.launch(Dispatchers.Main) {
+                adapter.submitList(insAdpTasks)
+            }
         }
     }
 }
