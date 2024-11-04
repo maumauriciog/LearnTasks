@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         val btnFab = findViewById<FloatingActionButton>(R.id.fab)
 
         btnFab.setOnClickListener {
-            val taskButShet = TaskBotSheet(
+            val taskButSheet = TaskBotSheet(
                 categories
             ) { taskToBeCreated ->
                 val newTask = TaskEntity(
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                 insertTaskDb(newTask)
             }
 
-            taskButShet.show(supportFragmentManager, "taskBoo")
+            taskButSheet.show(supportFragmentManager, "taskBoo")
         }
 
         categoryAdapter.setOnClickListener { selected ->
