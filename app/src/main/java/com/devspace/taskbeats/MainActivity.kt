@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity() {
                 )
                 insertTaskDb(newTask)
             }
-
             taskButSheet.show(supportFragmentManager, "taskBoo")
         }
 
@@ -116,8 +115,9 @@ class MainActivity : AppCompatActivity() {
     private fun getTasks() {
         GlobalScope.launch(Dispatchers.IO) {
             val getFromDbTasks: List<TaskEntity> = taskDao.getAll()
-            val insAdpTasks = getFromDbTasks.map {
+            val insAdpTasks: List<TaskUiData> = getFromDbTasks.map {
                 TaskUiData(
+                    id = it.id,
                     name = it.nameTask,
                     category = it.nameCategory
                 )
