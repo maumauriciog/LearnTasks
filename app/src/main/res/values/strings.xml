@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">TaskBeats</string>
     <string name="home_title">Task Beat</string>
+
+
+    <string name="new_category">New Category</string>
+    <string name="create_new_category">create new category</string>
+    <string name="write_the_new_category">write the new category…</string>
+
+    <string name="new_task">New Task</string>
+    <string name="create_new_tarefa">create new tarefa</string>
 </resources>

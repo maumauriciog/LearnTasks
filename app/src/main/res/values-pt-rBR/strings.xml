@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TaskBeats</string>
+    <string name="home_title">Task Beat</string>
+
+    <string name="new_category">Nova Categoria</string>
+    <string name="create_new_category">criar nova categoria</string>
+    <string name="write_the_new_category">escreva a nova categoria…</string>
+
+
+    <string name="new_task">Nova Tarefa</string>
+    <string name="create_new_tarefa">create new tarefa</string>
+</resources>

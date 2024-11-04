@@ -6,16 +6,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-
     private var categories = listOf<CategoryUiData>()
     private var tasks = listOf<TaskUiData>()
+
+    private val categoryAdapter = CategoryListAdapter()
+    private val taskAdapter = TaskListAdapter()
 
     private val database by lazy {
         Room.databaseBuilder(
@@ -36,13 +38,32 @@ class MainActivity : AppCompatActivity() {
 
         val rvCategory = findViewById<RecyclerView>(R.id.rv_categories)
         val rvTask = findViewById<RecyclerView>(R.id.rv_tasks)
+        val btnFab = findViewById<FloatingActionButton>(R.id.fab)
 
-        val taskAdapter = TaskListAdapter()
-        val categoryAdapter = CategoryListAdapter()
+        btnFab.setOnClickListener {
+            val taskButShet = TaskBotSheet(
+                categories
+            ) { taskToBeCreated ->
+                val newTask = TaskEntity(
+                    nameTask = taskToBeCreated.name,
+                    nameCategory = taskToBeCreated.category
+                )
+                insertTaskDb(newTask)
+            }
+
+            taskButShet.show(supportFragmentManager, "taskBoo")
+        }
 
         categoryAdapter.setOnClickListener { selected ->
             if (selected.name == "Add Category...") {
-                Snackbar.make(rvCategory, "clicked", Snackbar.LENGTH_LONG).show()
+                val categoryBottSheet = CategoryBottSheet { categoryCreated ->
+                    val insFromDB = CategoryEntity(
+                        name = categoryCreated,
+                        isSelected = false
+                    )
+                    insertCategory(insFromDB)
+                }
+                categoryBottSheet.show(supportFragmentManager, "categoryBott")
             } else {
                 val categoryTemp = categories.map { item ->
                     when {
@@ -63,13 +84,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         rvCategory.adapter = categoryAdapter
-        getCategories(categoryAdapter)
+        getCategories()
         rvTask.adapter = taskAdapter
-        getTasks(taskAdapter)
+        getTasks()
     }
 
     //get categories
-    private fun getCategories(adapter: CategoryListAdapter) {
+    private fun getCategories() {
         GlobalScope.launch(Dispatchers.IO) {
             val getCategories: List<CategoryEntity> = categoryDao.getAll()
             val uICategories = getCategories.map {
@@ -86,13 +107,13 @@ class MainActivity : AppCompatActivity() {
             )
             GlobalScope.launch(Dispatchers.Main) {
                 categories = uICategories
-                adapter.submitList(uICategories)
+                categoryAdapter.submitList(uICategories)
             }
         }
     }
 
     //get all tasks from database
-    private fun getTasks(adapter: TaskListAdapter) {
+    private fun getTasks() {
         GlobalScope.launch(Dispatchers.IO) {
             val getFromDbTasks: List<TaskEntity> = taskDao.getAll()
             val insAdpTasks = getFromDbTasks.map {
@@ -103,8 +124,23 @@ class MainActivity : AppCompatActivity() {
             }
             GlobalScope.launch(Dispatchers.Main) {
                 tasks = insAdpTasks
-                adapter.submitList(insAdpTasks)
+                taskAdapter.submitList(insAdpTasks)
             }
+        }
+    }
+
+    //insert in database
+    private fun insertCategory(categoryEntity: CategoryEntity) {
+        GlobalScope.launch(Dispatchers.IO) {
+            categoryDao.insert(categoryEntity)
+            getCategories()
+        }
+    }
+
+    private fun insertTaskDb (taskEntity: TaskEntity){
+        GlobalScope.launch(Dispatchers.IO){
+            taskDao.insert(taskEntity)
+            getTasks()
         }
     }
 }
