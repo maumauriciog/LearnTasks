@@ -36,6 +36,7 @@ class TaskBotSheet(
             btnCrTask.setText(R.string.create_new_task)
         } else {
             tltTask.setText(R.string.title_update_task)
+
             btnCrTask.setText(R.string.title_update_task)
         }
 
