@@ -82,12 +82,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        taskAdapter.setOnClick { 
+
+        }
+
         rvCategory.adapter = categoryAdapter
         getCategories()
         rvTask.adapter = taskAdapter
         getTasks()
-    }
 
+    }
     //get categories
     private fun getCategories() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -110,7 +114,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     //get all tasks from database
     private fun getTasks() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -128,17 +131,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    //insert in database
+    //insert category in database
     private fun insertCategory(categoryEntity: CategoryEntity) {
         GlobalScope.launch(Dispatchers.IO) {
             categoryDao.insert(categoryEntity)
             getCategories()
         }
     }
-
-    private fun insertTaskDb (taskEntity: TaskEntity){
-        GlobalScope.launch(Dispatchers.IO){
+    //insert task in database
+    private fun insertTaskDb(taskEntity: TaskEntity) {
+        GlobalScope.launch(Dispatchers.IO) {
             taskDao.insert(taskEntity)
             getTasks()
         }

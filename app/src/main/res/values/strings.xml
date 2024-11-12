@@ -7,6 +7,10 @@
     <string name="create_new_category">create new category</string>
     <string name="write_the_new_category">write the new category…</string>
 
+
+
     <string name="new_task">New Task</string>
     <string name="create_new_tarefa">create new tarefa</string>
+    <string name="write_the_new_task">write the new task…</string>
+    <string name="update_task">update task</string>
 </resources>

@@ -5,8 +5,8 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-
     <TextView
+        android:id="@+id/tlt_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="18dp"
@@ -27,9 +27,9 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tiv_new_task"
-            android:hint="write the new task..."
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:hint="@string/write_the_new_task" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -40,5 +40,12 @@
         android:text="@string/create_new_tarefa"
         android:textSize="19sp" />
 
-
+    <Button
+        android:id="@+id/btn_updateTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20sp"
+        android:layout_marginEnd="20sp"
+        android:text="@string/update_task"
+        android:textSize="19sp" />
 </LinearLayout>

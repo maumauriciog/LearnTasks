@@ -8,12 +8,14 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 
 class TaskBotSheet(
     private val categories: List<CategoryUiData>,
+    private val task: TaskUiData? = null,
     private val onClicked: (TaskUiData) -> Unit
 ) : BottomSheetDialogFragment() {
 
@@ -24,9 +26,14 @@ class TaskBotSheet(
     ): View? {
         val view = inflater.inflate(R.layout.task_botton_sheet, container, false)
 
+        val tltTask = view.findViewById<TextView>(R.id.tlt_task)
         val spLstCategory = view.findViewById<Spinner>(R.id.sp_list_categories)
         val tivNewTask = view.findViewById<TextInputEditText>(R.id.tiv_new_task)
         val btnCrTask = view.findViewById<Button>(R.id.btn_CrTask)
+
+        if (task == null){
+
+        }
 
         var taskCategory: String? = null
 
@@ -35,6 +42,7 @@ class TaskBotSheet(
             if (taskCategory != null) {
                 onClicked.invoke(
                     TaskUiData(
+                        id = 0,
                         name = name,
                         category = requireNotNull(taskCategory)
                     )

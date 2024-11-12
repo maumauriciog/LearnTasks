@@ -10,4 +10,6 @@
 
     <string name="new_task">Nova Tarefa</string>
     <string name="create_new_tarefa">create new tarefa</string>
+    <string name="write_the_new_task">escreva a nova tarefa…</string>
+    <string name="update_task">atualizar tarefa</string>
 </resources>
