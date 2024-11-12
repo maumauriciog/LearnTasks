@@ -31,8 +31,12 @@ class TaskBotSheet(
         val tivNewTask = view.findViewById<TextInputEditText>(R.id.tiv_new_task)
         val btnCrTask = view.findViewById<Button>(R.id.btn_CrTask)
 
-        if (task == null){
-
+        if (task == null) {
+            tltTask.setText(R.string.title_new_task)
+            btnCrTask.setText(R.string.create_new_task)
+        } else {
+            tltTask.setText(R.string.title_update_task)
+            btnCrTask.setText(R.string.title_update_task)
         }
 
         var taskCategory: String? = null
@@ -49,7 +53,11 @@ class TaskBotSheet(
                 )
                 dismiss()
             } else {
-                Snackbar.make(btnCrTask, "Please, select categories or write new task...", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    btnCrTask,
+                    "Please, select categories or write new task...",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
         }
 

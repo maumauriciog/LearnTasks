@@ -9,8 +9,9 @@
 
 
 
-    <string name="new_task">New Task</string>
-    <string name="create_new_tarefa">create new tarefa</string>
+    <string name="title_new_task">New Task</string>
+    <string name="title_update_task">Update Task</string>
     <string name="write_the_new_task">write the new task…</string>
+    <string name="create_new_task">create new task</string>
     <string name="update_task">update task</string>
 </resources>

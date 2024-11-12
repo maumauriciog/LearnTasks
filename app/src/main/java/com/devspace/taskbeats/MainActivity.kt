@@ -41,16 +41,7 @@ class MainActivity : AppCompatActivity() {
         val btnFab = findViewById<FloatingActionButton>(R.id.fab)
 
         btnFab.setOnClickListener {
-            val taskButSheet = TaskBotSheet(
-                categories
-            ) { taskToBeCreated ->
-                val newTask = TaskEntity(
-                    nameTask = taskToBeCreated.name,
-                    nameCategory = taskToBeCreated.category
-                )
-                insertTaskDb(newTask)
-            }
-            taskButSheet.show(supportFragmentManager, "taskBoo")
+            showTaskButSheetFunction()
         }
 
         categoryAdapter.setOnClickListener { selected ->
@@ -82,8 +73,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        taskAdapter.setOnClick { 
-
+        taskAdapter.setOnClick { task ->
+            showTaskButSheetFunction(task)
         }
 
         rvCategory.adapter = categoryAdapter
@@ -92,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         getTasks()
 
     }
+
     //get categories
     private fun getCategories() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -114,6 +106,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     //get all tasks from database
     private fun getTasks() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -131,6 +124,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     //insert category in database
     private fun insertCategory(categoryEntity: CategoryEntity) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -138,11 +132,26 @@ class MainActivity : AppCompatActivity() {
             getCategories()
         }
     }
+
     //insert task in database
     private fun insertTaskDb(taskEntity: TaskEntity) {
         GlobalScope.launch(Dispatchers.IO) {
             taskDao.insert(taskEntity)
             getTasks()
         }
+    }
+
+    private fun showTaskButSheetFunction(taskUiData: TaskUiData? = null) {
+        val taskButSheet = TaskBotSheet(
+            task = taskUiData,
+            categories = categories
+        ) { taskToBeCreated ->
+            val newTask = TaskEntity(
+                nameTask = taskToBeCreated.name,
+                nameCategory = taskToBeCreated.category
+            )
+            insertTaskDb(newTask)
+        }
+        taskButSheet.show(supportFragmentManager, "taskBoo")
     }
 }

@@ -8,8 +8,9 @@
     <string name="write_the_new_category">escreva a nova categoria…</string>
 
 
-    <string name="new_task">Nova Tarefa</string>
-    <string name="create_new_tarefa">create new tarefa</string>
+    <string name="title_new_task">Nova Tarefa</string>
+    <string name="title_update_task">Update Tarefa</string>
     <string name="write_the_new_task">escreva a nova tarefa…</string>
+    <string name="create_new_task">criar nova tarefa</string>
     <string name="update_task">atualizar tarefa</string>
 </resources>
